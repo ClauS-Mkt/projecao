@@ -1,20 +1,38 @@
-// Simulando pedidos em memória (em breve virá do Firebase)
-let pedidosRecebidos = [
-  {
-    produto: "Painel LED P5",
-    quantidade: 2,
-    descricao: "Instalação para evento no centro",
-    status: "pendente"
-  },
-  {
-    produto: "Totem Interativo",
-    quantidade: 1,
-    descricao: "Loja shopping - ativação promocional",
-    status: "pendente"
-  }
-];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
+// Configuração do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyBs1jwFTLVKTZrmviCjuC70__A2Q-VGLog",
+  authDomain: "projecao-c1ffc.firebaseapp.com",
+  projectId: "projecao-c1ffc",
+  storageBucket: "projecao-c1ffc.firebasestorage.app",
+  messagingSenderId: "1048500488131",
+  appId: "1:1048500488131:web:1b6a40e4268eac8f819f76"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let pedidosRecebidos = [];
 let pedidoSelecionado = null;
+
+async function carregarPedidos() {
+  const snapshot = await getDocs(collection(db, "pedidos"));
+  pedidosRecebidos = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+
+  atualizarTabelaPedidos();
+}
 
 function atualizarTabelaPedidos() {
   const tbody = document.getElementById("tabela-geral-pedidos");
@@ -24,10 +42,10 @@ function atualizarTabelaPedidos() {
     const tr = document.createElement("tr");
 
     const tdProduto = document.createElement("td");
-    tdProduto.textContent = pedido.produto;
+    tdProduto.textContent = pedido.tipoPainel + " - " + pedido.pixel;
 
     const tdQtd = document.createElement("td");
-    tdQtd.textContent = pedido.quantidade;
+    tdQtd.textContent = pedido.tamanho;
 
     const tdStatus = document.createElement("td");
     tdStatus.textContent = pedido.status;
@@ -51,29 +69,32 @@ function abrirDetalhes(index) {
   pedidoSelecionado = index;
   const pedido = pedidosRecebidos[index];
 
-  document.getElementById("det-produto").textContent = pedido.produto;
-  document.getElementById("det-quantidade").textContent = pedido.quantidade;
-  document.getElementById("det-descricao").textContent = pedido.descricao;
+  document.getElementById("det-produto").textContent = pedido.tipoPainel + " - " + pedido.pixel;
+  document.getElementById("det-quantidade").textContent = pedido.tamanho;
+  document.getElementById("det-descricao").textContent = pedido.descricao + "\n\n" + pedido.info;
 
   document.getElementById("detalhes-pedido").style.display = "block";
 }
 
-document.getElementById("btn-aceitar").addEventListener("click", () => {
+document.getElementById("btn-aceitar").addEventListener("click", async () => {
   if (pedidoSelecionado !== null) {
-    pedidosRecebidos[pedidoSelecionado].status = "aceito";
-    atualizarTabelaPedidos();
+    const pedido = pedidosRecebidos[pedidoSelecionado];
+    const pedidoRef = doc(db, "pedidos", pedido.id);
+    await updateDoc(pedidoRef, { status: "aceito" });
+    await carregarPedidos();
     document.getElementById("detalhes-pedido").style.display = "none";
   }
 });
 
-document.getElementById("btn-finalizar").addEventListener("click", () => {
+document.getElementById("btn-finalizar").addEventListener("click", async () => {
   if (pedidoSelecionado !== null) {
-    pedidosRecebidos.splice(pedidoSelecionado, 1); // Remove da lista
-    atualizarTabelaPedidos();
+    const pedido = pedidosRecebidos[pedidoSelecionado];
+    const pedidoRef = doc(db, "pedidos", pedido.id);
+    await deleteDoc(pedidoRef);
+    await carregarPedidos();
     document.getElementById("detalhes-pedido").style.display = "none";
     pedidoSelecionado = null;
   }
 });
 
-// Inicializa tabela ao carregar
-document.addEventListener("DOMContentLoaded", atualizarTabelaPedidos);
+document.addEventListener("DOMContentLoaded", carregarPedidos);
