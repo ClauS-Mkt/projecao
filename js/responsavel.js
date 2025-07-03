@@ -82,7 +82,7 @@ function atualizarTabelaPedidos() {
     tdDetalhes.style.padding = "10px";
     tdDetalhes.style.backgroundColor = "#f9f9f9";
     tdDetalhes.innerHTML = `
-      <strong>Consultor:</strong> ${pedido.consultor || ""}<br>
+      <<strong>Consultor:</strong> ${pedido.consultor || ""}<br>
       <strong>Cliente:</strong> ${pedido.cliente || ""}<br>
       <strong>Cidade:</strong> ${pedido.cidade || ""}<br>
       <strong>Tipo:</strong> ${pedido.tipoPainel || ""}<br>
@@ -90,9 +90,7 @@ function atualizarTabelaPedidos() {
       <strong>Gabinete:</strong> ${pedido.gabinete || ""}<br>
       <strong>Pixel:</strong> ${pedido.pixel || ""}<br>
       <strong>Descrição:</strong> ${pedido.descricao || ""}<br>
-      <strong>Informações Úteis:</strong> ${pedido.info || ""}<br>
-      <strong>Status:</strong> ${pedido.status || ""}
-      <br><br>
+      <strong>Informações Úteis:</strong> ${pedido.info || ""}<br><br>
       <button id="btn-aceitar-${index}" type="button">Aceitar</button>
       <button id="btn-finalizar-${index}" type="button">Finalizar</button>
     `;
