@@ -60,6 +60,7 @@ function atualizarTabelaPedidos() {
     const tdAcoes = document.createElement("td");
     const btnVer = document.createElement("button");
     btnVer.textContent = "Ver";
+    btnVer.type = "button";  // evita possíveis problemas com forms
     btnVer.addEventListener("click", () => abrirDetalhes(index));
     tdAcoes.appendChild(btnVer);
 
@@ -72,6 +73,7 @@ function atualizarTabelaPedidos() {
   });
 }
 
+
 function abrirDetalhes(index) {
   pedidoSelecionado = index;
   const pedido = pedidosRecebidos[index];
@@ -79,7 +81,7 @@ function abrirDetalhes(index) {
   document.getElementById("det-consultor").textContent = pedido.consultor || "";
   document.getElementById("det-cliente").textContent = pedido.cliente || "";
   document.getElementById("det-cidade").textContent = pedido.cidade || "";
-  document.getElementById("det-produto").textContent = pedido.tipoPainel + " - " + (pedido.pixel || "");
+  document.getElementById("det-produto").textContent = pedido.tipoPainel + "";
   document.getElementById("det-quantidade").textContent = pedido.tamanho || "";
   document.getElementById("det-gabinete").textContent = pedido.gabinete || "";
   document.getElementById("det-pixel").textContent = pedido.pixel || "";
