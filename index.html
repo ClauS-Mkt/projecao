@@ -26,65 +26,31 @@
     </section>
   </main>
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
-    // Configuração Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyBs1jwFTLVKTZrmviCjuC70__A2Q-VGLog",
-      authDomain: "projecao-c1ffc.firebaseapp.com",
-      projectId: "projecao-c1ffc",
-      storageBucket: "projecao-c1ffc.firebasestorage.app",
-      messagingSenderId: "1048500488131",
-      appId: "1:1048500488131:web:1b6a40e4268eac8f819f76"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  <script>
+    const usuarios = [
+      { login: "joao", senha: "123", tipo: "solicitante" },
+      { login: "ana", senha: "123", tipo: "responsavel" }
+    ];
 
     const form = document.getElementById("login-form");
     const erro = document.getElementById("login-error");
 
-    form.addEventListener("submit", async function (e) {
+    form.addEventListener("submit", function(e) {
       e.preventDefault();
 
       const loginDigitado = document.getElementById("login").value.trim();
-      const senha = document.getElementById("senha").value;
+      const senhaDigitada = document.getElementById("senha").value;
 
-      try {
-        // Buscar usuário por login na coleção "usuarios"
-        const usuariosRef = collection(db, "usuarios");
-        const q = query(usuariosRef, where("login", "==", loginDigitado));
-        const querySnapshot = await getDocs(q);
+      const usuario = usuarios.find(u => u.login === loginDigitado && u.senha === senhaDigitada);
 
-        if (querySnapshot.empty) {
-          erro.textContent = "Usuário não encontrado.";
-          return;
-        }
-
-        const userDoc = querySnapshot.docs[0];
-        const userData = userDoc.data();
-        const email = userData.email;
-        const tipo = userData.tipo;
-
-        // Autenticar com e-mail + senha
-        await signInWithEmailAndPassword(auth, email, senha);
-
-        // Redirecionar conforme tipo
-        if (tipo === "solicitante") {
+      if (usuario) {
+        if (usuario.tipo === "solicitante") {
           window.location.href = "solicitante.html";
-        } else if (tipo === "responsavel") {
+        } else if (usuario.tipo === "responsavel") {
           window.location.href = "responsavel.html";
-        } else {
-          erro.textContent = "Tipo de usuário não reconhecido.";
         }
-
-      } catch (err) {
-        erro.textContent = "Falha no login: " + err.message;
+      } else {
+        erro.textContent = "Usuário ou senha inválidos.";
       }
     });
   </script>
