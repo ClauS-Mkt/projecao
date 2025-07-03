@@ -70,46 +70,63 @@ function atualizarTabelaPedidos() {
     tr.appendChild(tdAcoes);
 
     tbody.appendChild(tr);
+
+    // Linha para detalhes, inicialmente escondida
+    const trDetalhes = document.createElement("tr");
+    trDetalhes.style.display = "none";
+    trDetalhes.classList.add("detalhes-linha");
+    trDetalhes.id = `detalhes-${index}`;
+    const tdDetalhes = document.createElement("td");
+    tdDetalhes.colSpan = 4;
+    tdDetalhes.style.padding = "10px";
+    tdDetalhes.style.backgroundColor = "#f9f9f9";
+    tdDetalhes.style.borderTop = "none";
+    tdDetalhes.innerHTML = `
+      <strong>Consultor:</strong> ${pedido.consultor || ""}<br>
+      <strong>Cliente:</strong> ${pedido.cliente || ""}<br>
+      <strong>Cidade:</strong> ${pedido.cidade || ""}<br>
+      <strong>Tipo:</strong> ${pedido.tipoPainel || ""}<br>
+      <strong>Tamanho:</strong> ${pedido.tamanho || ""}<br>
+      <strong>Gabinete:</strong> ${pedido.gabinete || ""}<br>
+      <strong>Pixel:</strong> ${pedido.pixel || ""}<br>
+      <strong>Descrição:</strong> ${pedido.descricao || ""}<br>
+      <strong>Informações Úteis:</strong> ${pedido.info || ""}<br>
+      <strong>Status:</strong> ${pedido.status || ""}
+      <br><br>
+      <button id="btn-aceitar-${index}">Aceitar</button>
+      <button id="btn-finalizar-${index}">Finalizar</button>
+    `;
+    tbody.appendChild(trDetalhes);
+
+    // Eventos dos botões aceitar e finalizar dentro dos detalhes
+    setTimeout(() => { // Timeout para garantir que os elementos estejam no DOM
+      document.getElementById(`btn-aceitar-${index}`).addEventListener("click", async () => {
+        const pedidoRef = doc(db, "pedidos", pedido.id);
+        await updateDoc(pedidoRef, { status: "aceito" });
+        await carregarPedidos();
+      });
+      document.getElementById(`btn-finalizar-${index}`).addEventListener("click", async () => {
+        const pedidoRef = doc(db, "pedidos", pedido.id);
+        await deleteDoc(pedidoRef);
+        await carregarPedidos();
+      });
+    }, 0);
   });
 }
 
 function abrirDetalhes(index) {
-  pedidoSelecionado = index;
-  const pedido = pedidosRecebidos[index];
+  // Esconde todas as linhas de detalhes abertas
+  document.querySelectorAll(".detalhes-linha").forEach(tr => {
+    tr.style.display = "none";
+  });
 
-  document.getElementById("det-consultor").textContent = pedido.consultor || "";
-  document.getElementById("det-cliente").textContent = pedido.cliente || "";
-  document.getElementById("det-cidade").textContent = pedido.cidade || "";
-  document.getElementById("det-tipo").textContent = pedido.tipoPainel || "";
-  document.getElementById("det-tamanho").textContent = pedido.tamanho || "";
-  document.getElementById("det-gabinete").textContent = pedido.gabinete || "";
-  document.getElementById("det-pixel").textContent = pedido.pixel || "";
-  document.getElementById("det-descricao").textContent = pedido.descricao || "";
-  document.getElementById("det-info").textContent = pedido.info || "";
-  document.getElementById("det-status").textContent = pedido.status || "";
-
-  document.getElementById("detalhes-pedido").style.display = "block";
+  // Alterna a exibição da linha de detalhes correspondente
+  const trDetalhes = document.getElementById(`detalhes-${index}`);
+  if (trDetalhes.style.display === "table-row") {
+    trDetalhes.style.display = "none";
+  } else {
+    trDetalhes.style.display = "table-row";
+  }
 }
-
-document.getElementById("btn-aceitar").addEventListener("click", async () => {
-  if (pedidoSelecionado !== null) {
-    const pedido = pedidosRecebidos[pedidoSelecionado];
-    const pedidoRef = doc(db, "pedidos", pedido.id);
-    await updateDoc(pedidoRef, { status: "aceito" });
-    await carregarPedidos();
-    document.getElementById("detalhes-pedido").style.display = "none";
-  }
-});
-
-document.getElementById("btn-finalizar").addEventListener("click", async () => {
-  if (pedidoSelecionado !== null) {
-    const pedido = pedidosRecebidos[pedidoSelecionado];
-    const pedidoRef = doc(db, "pedidos", pedido.id);
-    await deleteDoc(pedidoRef);
-    await carregarPedidos();
-    document.getElementById("detalhes-pedido").style.display = "none";
-    pedidoSelecionado = null;
-  }
-});
 
 document.addEventListener("DOMContentLoaded", carregarPedidos);
