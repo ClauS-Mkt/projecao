@@ -50,6 +50,13 @@ function atualizarTabelaPedidos() {
     const tdStatus = document.createElement("td");
     tdStatus.textContent = pedido.status || "";
 
+    // Aplica classe de cor conforme status
+    if (pedido.status && pedido.status.toLowerCase() === "aceito") {
+      tdStatus.classList.add("status-aceito");
+    } else if (pedido.status && pedido.status.toLowerCase() === "pendente") {
+      tdStatus.classList.add("status-pendente");
+    }
+
     const tdAcoes = document.createElement("td");
     const btnVer = document.createElement("button");
     btnVer.textContent = "Ver";
@@ -72,8 +79,8 @@ function abrirDetalhes(index) {
   document.getElementById("det-consultor").textContent = pedido.consultor || "";
   document.getElementById("det-cliente").textContent = pedido.cliente || "";
   document.getElementById("det-cidade").textContent = pedido.cidade || "";
-  document.getElementById("det-tipo").textContent = pedido.tipoPainel + "";
-  document.getElementById("det-tamanho").textContent = pedido.tamanho || "";
+  document.getElementById("det-produto").textContent = pedido.tipoPainel + " - " + (pedido.pixel || "");
+  document.getElementById("det-quantidade").textContent = pedido.tamanho || "";
   document.getElementById("det-gabinete").textContent = pedido.gabinete || "";
   document.getElementById("det-pixel").textContent = pedido.pixel || "";
   document.getElementById("det-descricao").textContent = pedido.descricao || "";
