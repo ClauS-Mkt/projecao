@@ -96,15 +96,15 @@ tr:nth-child(even) {
   margin-top: 10px;
 }
 
-.status-aceito {
-  background-color: #d4edda; /* verde claro */
-  color: #155724; /* verde escuro */
+td.status-aceito {
+  background-color: #d4edda !important;
+  color: #155724 !important;
   font-weight: bold;
 }
 
-.status-pendente {
-  background-color: #fff3cd; /* amarelo claro */
-  color: #856404; /* amarelo escuro */
+td.status-pendente {
+  background-color: #fff3cd !important;
+  color: #856404 !important;
   font-weight: bold;
 }
 
