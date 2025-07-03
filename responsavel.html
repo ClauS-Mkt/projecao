@@ -17,6 +17,7 @@
       <table>
         <thead>
           <tr>
+            <th>Consultor</th>
             <th>Produto</th>
             <th>Quantidade</th>
             <th>Status</th>
@@ -29,16 +30,25 @@
       </table>
     </section>
 
+
     <!-- Detalhes do pedido selecionado -->
     <section id="detalhes-pedido" class="detalhes" style="display:none;">
       <h2>Detalhes do Pedido</h2>
-      <p><strong>Produto:</strong> <span id="det-produto"></span></p>
-      <p><strong>Quantidade:</strong> <span id="det-quantidade"></span></p>
-      <p><strong>Descrição:</strong> <span id="det-descricao"></span></p>
+      <div><strong>Consultor:</strong> <span id="det-consultor"></span></div>
+      <div><strong>Cliente:</strong> <span id="det-cliente"></span></div>
+      <div><strong>Cidade:</strong> <span id="det-cidade"></span></div>
+      <div><strong>Produto:</strong> <span id="det-produto"></span></div>
+      <div><strong>Quantidade:</strong> <span id="det-quantidade"></span></div>
+      <div><strong>Tipo de Gabinete:</strong> <span id="det-gabinete"></span></div>
+      <div><strong>Pixel:</strong> <span id="det-pixel"></span></div>
+      <div><strong>Descrição:</strong> <p id="det-descricao"></p></div>
+      <div><strong>Informações Úteis:</strong> <p id="det-info"></p></div>
+      <div><strong>Status:</strong> <span id="det-status"></span></div>
 
       <button id="btn-aceitar">Aceitar</button>
       <button id="btn-finalizar">Finalizar</button>
     </section>
+
   </main>
 
   <!-- Carrega o script do Firebase + lógica do responsável -->
