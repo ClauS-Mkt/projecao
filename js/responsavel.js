@@ -22,7 +22,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let pedidosRecebidos = [];
-let pedidoSelecionado = null;
+let pedidoAbertoIndex = null;
 
 async function carregarPedidos() {
   const snapshot = await getDocs(collection(db, "pedidos"));
@@ -39,6 +39,7 @@ function atualizarTabelaPedidos() {
   tbody.innerHTML = "";
 
   pedidosRecebidos.forEach((pedido, index) => {
+    // Linha principal do pedido
     const tr = document.createElement("tr");
 
     const tdConsultor = document.createElement("td");
@@ -50,7 +51,7 @@ function atualizarTabelaPedidos() {
     const tdStatus = document.createElement("td");
     tdStatus.textContent = pedido.status || "";
 
-    // Aplica classe de cor conforme status
+    // Estiliza status
     if (pedido.status && pedido.status.toLowerCase() === "aceito") {
       tdStatus.classList.add("status-aceito");
     } else if (pedido.status && pedido.status.toLowerCase() === "pendente") {
@@ -60,8 +61,8 @@ function atualizarTabelaPedidos() {
     const tdAcoes = document.createElement("td");
     const btnVer = document.createElement("button");
     btnVer.textContent = "Ver";
-    btnVer.type = "button";  // evita problemas com forms
-    btnVer.addEventListener("click", () => abrirDetalhes(index));
+    btnVer.type = "button";
+    btnVer.addEventListener("click", () => toggleDetalhes(index));
     tdAcoes.appendChild(btnVer);
 
     tr.appendChild(tdConsultor);
@@ -71,7 +72,7 @@ function atualizarTabelaPedidos() {
 
     tbody.appendChild(tr);
 
-    // Linha para detalhes, inicialmente escondida
+    // Linha de detalhes
     const trDetalhes = document.createElement("tr");
     trDetalhes.style.display = "none";
     trDetalhes.classList.add("detalhes-linha");
@@ -80,7 +81,6 @@ function atualizarTabelaPedidos() {
     tdDetalhes.colSpan = 4;
     tdDetalhes.style.padding = "10px";
     tdDetalhes.style.backgroundColor = "#f9f9f9";
-    tdDetalhes.style.borderTop = "none";
     tdDetalhes.innerHTML = `
       <strong>Consultor:</strong> ${pedido.consultor || ""}<br>
       <strong>Cliente:</strong> ${pedido.cliente || ""}<br>
@@ -93,39 +93,54 @@ function atualizarTabelaPedidos() {
       <strong>Informações Úteis:</strong> ${pedido.info || ""}<br>
       <strong>Status:</strong> ${pedido.status || ""}
       <br><br>
-      <button id="btn-aceitar-${index}">Aceitar</button>
-      <button id="btn-finalizar-${index}">Finalizar</button>
+      <button id="btn-aceitar-${index}" type="button">Aceitar</button>
+      <button id="btn-finalizar-${index}" type="button">Finalizar</button>
     `;
+    trDetalhes.appendChild(tdDetalhes);
     tbody.appendChild(trDetalhes);
 
-    // Eventos dos botões aceitar e finalizar dentro dos detalhes
-    setTimeout(() => { // Timeout para garantir que os elementos estejam no DOM
-      document.getElementById(`btn-aceitar-${index}`).addEventListener("click", async () => {
-        const pedidoRef = doc(db, "pedidos", pedido.id);
-        await updateDoc(pedidoRef, { status: "aceito" });
-        await carregarPedidos();
-      });
-      document.getElementById(`btn-finalizar-${index}`).addEventListener("click", async () => {
-        const pedidoRef = doc(db, "pedidos", pedido.id);
-        await deleteDoc(pedidoRef);
-        await carregarPedidos();
-      });
+    // Adiciona listeners para os botões aceitar e finalizar
+    setTimeout(() => {
+      const btnAceitar = document.getElementById(`btn-aceitar-${index}`);
+      const btnFinalizar = document.getElementById(`btn-finalizar-${index}`);
+
+      if (btnAceitar) {
+        btnAceitar.onclick = async () => {
+          const pedidoRef = doc(db, "pedidos", pedido.id);
+          await updateDoc(pedidoRef, { status: "aceito" });
+          pedidoAbertoIndex = null;
+          await carregarPedidos();
+        };
+      }
+
+      if (btnFinalizar) {
+        btnFinalizar.onclick = async () => {
+          const pedidoRef = doc(db, "pedidos", pedido.id);
+          await deleteDoc(pedidoRef);
+          pedidoAbertoIndex = null;
+          await carregarPedidos();
+        };
+      }
     }, 0);
   });
 }
 
-function abrirDetalhes(index) {
-  // Esconde todas as linhas de detalhes abertas
-  document.querySelectorAll(".detalhes-linha").forEach(tr => {
-    tr.style.display = "none";
-  });
+function toggleDetalhes(index) {
+  // Fecha detalhes abertos diferentes do clicado
+  if (pedidoAbertoIndex !== null && pedidoAbertoIndex !== index) {
+    const trAnterior = document.getElementById(`detalhes-${pedidoAbertoIndex}`);
+    if (trAnterior) trAnterior.style.display = "none";
+  }
 
-  // Alterna a exibição da linha de detalhes correspondente
   const trDetalhes = document.getElementById(`detalhes-${index}`);
+  if (!trDetalhes) return;
+
   if (trDetalhes.style.display === "table-row") {
     trDetalhes.style.display = "none";
+    pedidoAbertoIndex = null;
   } else {
     trDetalhes.style.display = "table-row";
+    pedidoAbertoIndex = index;
   }
 }
 
