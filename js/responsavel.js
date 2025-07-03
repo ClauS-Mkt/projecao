@@ -72,8 +72,8 @@ function abrirDetalhes(index) {
   document.getElementById("det-consultor").textContent = pedido.consultor || "";
   document.getElementById("det-cliente").textContent = pedido.cliente || "";
   document.getElementById("det-cidade").textContent = pedido.cidade || "";
-  document.getElementById("det-tipo").textContent = pedido.tipoPainel + " - ";
-  document.getElementById("det-quantidade").textContent = pedido.tamanho || "";
+  document.getElementById("det-tipo").textContent = pedido.tipoPainel + "";
+  document.getElementById("det-tamanho").textContent = pedido.tamanho || "";
   document.getElementById("det-gabinete").textContent = pedido.gabinete || "";
   document.getElementById("det-pixel").textContent = pedido.pixel || "";
   document.getElementById("det-descricao").textContent = pedido.descricao || "";
