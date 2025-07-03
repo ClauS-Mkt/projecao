@@ -30,7 +30,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
     // Configuração Firebase
     const firebaseConfig = {
@@ -56,7 +56,7 @@
       const senha = document.getElementById("senha").value;
 
       try {
-        // Buscar usuário por nome de login na coleção "usuarios"
+        // Buscar usuário por login na coleção "usuarios"
         const usuariosRef = collection(db, "usuarios");
         const q = query(usuariosRef, where("login", "==", loginDigitado));
         const querySnapshot = await getDocs(q);
