@@ -82,7 +82,7 @@ function atualizarTabelaPedidos() {
     tdDetalhes.style.padding = "10px";
     tdDetalhes.style.backgroundColor = "#f9f9f9";
     tdDetalhes.innerHTML = `
-      <<strong>Consultor:</strong> ${pedido.consultor || ""}<br>
+      <strong>Consultor:</strong> ${pedido.consultor || ""}<br>
       <strong>Cliente:</strong> ${pedido.cliente || ""}<br>
       <strong>Cidade:</strong> ${pedido.cidade || ""}<br>
       <strong>Tipo:</strong> ${pedido.tipoPainel || ""}<br>
