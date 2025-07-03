@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerenciar Pedidos - Projeção</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <main class="container">
+    <h1>Gerenciamento de Pedidos</h1>
+
+    <!-- Lista de pedidos recebidos -->
+    <section class="lista-pedidos">
+      <h2>Pedidos Recebidos</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-geral-pedidos">
+          <!-- Linhas inseridas dinamicamente -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Detalhes do pedido selecionado -->
+    <section id="detalhes-pedido" class="detalhes" style="display:none;">
+      <h2>Detalhes do Pedido</h2>
+      <p><strong>Produto:</strong> <span id="det-produto"></span></p>
+      <p><strong>Quantidade:</strong> <span id="det-quantidade"></span></p>
+      <p><strong>Descrição:</strong> <span id="det-descricao"></span></p>
+
+      <button id="btn-aceitar">Aceitar</button>
+      <button id="btn-finalizar">Finalizar</button>
+    </section>
+  </main>
+
+  <script src="js/responsavel.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Projeção</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <main class="container">
+    <section class="login-box">
+      <h1>Login - Projeção</h1>
+
+      <form id="login-form">
+        <label for="login">Usuário</label>
+        <input type="text" id="login" required />
+
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" required />
+
+        <button type="submit">Entrar</button>
+      </form>
+
+      <p id="login-error" class="error-message"></p>
+    </section>
+  </main>
+
+  <script>
+    // Simulação de usuários (substituir com Firebase depois)
+    const usuarios = [
+      { login: "joao", senha: "123", tipo: "solicitante" },
+      { login: "ana", senha: "123", tipo: "responsavel" }
+    ];
+
+    const form = document.getElementById("login-form");
+    const erro = document.getElementById("login-error");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const login = document.getElementById("login").value.trim();
+      const senha = document.getElementById("senha").value;
+
+      const usuario = usuarios.find(u => u.login === login && u.senha === senha);
+
+      if (usuario) {
+        if (usuario.tipo === "solicitante") {
+          window.location.href = "solicitante.html";
+        } else if (usuario.tipo === "responsavel") {
+          window.location.href = "responsavel.html";
+        }
+      } else {
+        erro.textContent = "Usuário ou senha inválidos.";
+      }
+    });
+  </script>
+
+</body>
+</html>

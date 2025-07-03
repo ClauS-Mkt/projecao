@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solicitação de Pedido</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <main class="container">
+    <h1>Solicitação de Pedido</h1>
+
+    <!-- Formulário de checklist -->
+    <section class="form-section">
+      <h2>Checklist do Produto</h2>
+      <form id="checklist-form">
+        <label for="produto">Nome do Produto</label>
+        <input type="text" id="produto" required />
+
+        <label for="quantidade">Quantidade</label>
+        <input type="number" id="quantidade" min="1" required />
+
+        <label for="descricao">Descrição do Pedido</label>
+        <textarea id="descricao" rows="4" required></textarea>
+
+        <!-- Adicione mais perguntas conforme necessário -->
+        <button type="submit">Enviar Pedido</button>
+      </form>
+    </section>
+
+    <!-- Fila de pedidos -->
+    <section class="lista-pedidos">
+      <h2>Meus Pedidos</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-pedidos">
+          <!-- Linhas serão inseridas dinamicamente -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="js/solicitante.js"></script>
+
+</body>
+</html>
