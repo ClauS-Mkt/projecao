@@ -48,23 +48,11 @@ function atualizarTabelaPedidos() {
     tdQtd.textContent = pedido.tamanho || "";
 
     const tdStatus = document.createElement("td");
-    tdStatus.textContent = pedido.status ? pedido.status.toUpperCase() : "";
-
-    // Remove todas as classes antes
-    tdStatus.classList.remove("status-aceito", "status-pendente");
-
-    if (pedido.status) {
-      if (pedido.status.toLowerCase() === "aceito") {
-        tdStatus.classList.add("status-aceito");
-      } else if (pedido.status.toLowerCase() === "pendente") {
-        tdStatus.classList.add("status-pendente");
-      }
-    }
+    tdStatus.textContent = pedido.status || "";
 
     const tdAcoes = document.createElement("td");
     const btnVer = document.createElement("button");
     btnVer.textContent = "Ver";
-    btnVer.type = "button";
     btnVer.addEventListener("click", () => abrirDetalhes(index));
     tdAcoes.appendChild(btnVer);
 
@@ -77,7 +65,6 @@ function atualizarTabelaPedidos() {
   });
 }
 
-
 function abrirDetalhes(index) {
   pedidoSelecionado = index;
   const pedido = pedidosRecebidos[index];
@@ -85,8 +72,8 @@ function abrirDetalhes(index) {
   document.getElementById("det-consultor").textContent = pedido.consultor || "";
   document.getElementById("det-cliente").textContent = pedido.cliente || "";
   document.getElementById("det-cidade").textContent = pedido.cidade || "";
-  document.getElementById("det-produto").textContent = pedido.tipoPainel + "";
-  document.getElementById("det-quantidade").textContent = pedido.tamanho || "";
+  document.getElementById("det-tipo").textContent = pedido.tipoPainel + "";
+  document.getElementById("det-tamanho").textContent = pedido.tamanho || "";
   document.getElementById("det-gabinete").textContent = pedido.gabinete || "";
   document.getElementById("det-pixel").textContent = pedido.pixel || "";
   document.getElementById("det-descricao").textContent = pedido.descricao || "";
