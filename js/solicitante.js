@@ -1,5 +1,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  Timestamp
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 // Configuração Firebase
 const firebaseConfig = {
@@ -14,8 +22,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Submissão do formulário
-document.getElementById("checklist-form").addEventListener("submit", async function (e) {
+const form = document.getElementById("checklist-form");
+
+form.addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const consultor = document.getElementById("consultor").value.trim();
@@ -44,26 +53,29 @@ document.getElementById("checklist-form").addEventListener("submit", async funct
     descricao,
     info,
     status: "pendente",
-    criadoEm: new Date()
+    criadoEm: Timestamp.now()  // salva a data/hora do pedido
   };
 
   try {
     await addDoc(collection(db, "pedidos"), novoPedido);
     alert("Pedido enviado com sucesso!");
     e.target.reset();
-    carregarPedidos();
+    carregarPedidos(); // Atualiza a lista
   } catch (error) {
     console.error("Erro ao enviar pedido:", error);
     alert("Erro ao enviar pedido.");
   }
 });
 
-// Carrega os pedidos feitos por esse usuário (sem autenticação ainda)
+// Função para carregar e mostrar os pedidos, ordenados por criadoEm (mais antigo primeiro)
 async function carregarPedidos() {
   const tbody = document.getElementById("tabela-pedidos");
   tbody.innerHTML = "";
 
-  const snapshot = await getDocs(collection(db, "pedidos"));
+  const pedidosRef = collection(db, "pedidos");
+  const q = query(pedidosRef, orderBy("criadoEm", "asc")); // ordena do mais antigo para o mais recente
+
+  const snapshot = await getDocs(q);
 
   snapshot.forEach(doc => {
     const pedido = doc.data();
@@ -73,18 +85,19 @@ async function carregarPedidos() {
     const tdProduto = document.createElement("td");
     tdProduto.textContent = pedido.tipoPainel + " - " + pedido.pixel;
 
-    const tdQtd = document.createElement("td");
-    tdQtd.textContent = pedido.tamanho;
+    const tdTamanho = document.createElement("td");
+    tdTamanho.textContent = pedido.tamanho;
 
     const tdStatus = document.createElement("td");
     tdStatus.textContent = pedido.status;
 
     tr.appendChild(tdProduto);
-    tr.appendChild(tdQtd);
+    tr.appendChild(tdTamanho);
     tr.appendChild(tdStatus);
 
     tbody.appendChild(tr);
   });
 }
 
+// Carrega os pedidos ao abrir a página
 document.addEventListener("DOMContentLoaded", carregarPedidos);
