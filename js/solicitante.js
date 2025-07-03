@@ -92,6 +92,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const tdStatus = document.createElement("td");
       tdStatus.textContent = pedido.status;
 
+      // Aplica a classe conforme status
+      if (pedido.status.toLowerCase() === "aceito") {
+        tdStatus.classList.add("status-aceito");
+      } else if (pedido.status.toLowerCase() === "pendente") {
+        tdStatus.classList.add("status-pendente");
+      }
+
       tr.appendChild(tdProduto);
       tr.appendChild(tdTamanho);
       tr.appendChild(tdStatus);
