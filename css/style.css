@@ -100,11 +100,13 @@ td.status-aceito {
   background-color: #d4edda !important;
   color: #155724 !important;
   font-weight: bold;
+  text-transform: uppercase;
 }
 
 td.status-pendente {
   background-color: #fff3cd !important;
   color: #856404 !important;
   font-weight: bold;
+  text-transform: uppercase;
 }
 
