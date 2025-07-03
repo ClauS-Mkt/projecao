@@ -41,14 +41,14 @@ function atualizarTabelaPedidos() {
   pedidosRecebidos.forEach((pedido, index) => {
     const tr = document.createElement("tr");
 
-    const tdProduto = document.createElement("td");
-    tdProduto.textContent = pedido.tipoPainel + " - " + pedido.pixel;
+    const tdConsultor = document.createElement("td");
+    tdConsultor.textContent = pedido.consultor || "";
 
     const tdQtd = document.createElement("td");
-    tdQtd.textContent = pedido.tamanho;
+    tdQtd.textContent = pedido.tamanho || "";
 
     const tdStatus = document.createElement("td");
-    tdStatus.textContent = pedido.status;
+    tdStatus.textContent = pedido.status || "";
 
     const tdAcoes = document.createElement("td");
     const btnVer = document.createElement("button");
@@ -56,7 +56,7 @@ function atualizarTabelaPedidos() {
     btnVer.addEventListener("click", () => abrirDetalhes(index));
     tdAcoes.appendChild(btnVer);
 
-    tr.appendChild(tdProduto);
+    tr.appendChild(tdConsultor);
     tr.appendChild(tdQtd);
     tr.appendChild(tdStatus);
     tr.appendChild(tdAcoes);
@@ -69,9 +69,16 @@ function abrirDetalhes(index) {
   pedidoSelecionado = index;
   const pedido = pedidosRecebidos[index];
 
+  document.getElementById("det-consultor").textContent = pedido.consultor || "";
+  document.getElementById("det-cliente").textContent = pedido.cliente || "";
+  document.getElementById("det-cidade").textContent = pedido.cidade || "";
   document.getElementById("det-produto").textContent = pedido.tipoPainel + " - " + pedido.pixel;
-  document.getElementById("det-quantidade").textContent = pedido.tamanho;
-  document.getElementById("det-descricao").textContent = pedido.descricao + "\n\n" + pedido.info;
+  document.getElementById("det-quantidade").textContent = pedido.tamanho || "";
+  document.getElementById("det-gabinete").textContent = pedido.gabinete || "";
+  document.getElementById("det-pixel").textContent = pedido.pixel || "";
+  document.getElementById("det-descricao").textContent = pedido.descricao || "";
+  document.getElementById("det-info").textContent = pedido.info || "";
+  document.getElementById("det-status").textContent = pedido.status || "";
 
   document.getElementById("detalhes-pedido").style.display = "block";
 }
