@@ -95,3 +95,16 @@ tr:nth-child(even) {
   color: red;
   margin-top: 10px;
 }
+
+.status-aceito {
+  background-color: #d4edda; /* verde claro */
+  color: #155724; /* verde escuro */
+  font-weight: bold;
+}
+
+.status-pendente {
+  background-color: #fff3cd; /* amarelo claro */
+  color: #856404; /* amarelo escuro */
+  font-weight: bold;
+}
+
