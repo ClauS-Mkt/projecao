@@ -48,14 +48,23 @@ function atualizarTabelaPedidos() {
     tdQtd.textContent = pedido.tamanho || "";
 
     const tdStatus = document.createElement("td");
-    tdStatus.textContent = pedido.status || "";
+    tdStatus.textContent = pedido.status ? pedido.status.toUpperCase() : "";
 
-  
+    // Remove todas as classes antes
+    tdStatus.classList.remove("status-aceito", "status-pendente");
+
+    if (pedido.status) {
+      if (pedido.status.toLowerCase() === "aceito") {
+        tdStatus.classList.add("status-aceito");
+      } else if (pedido.status.toLowerCase() === "pendente") {
+        tdStatus.classList.add("status-pendente");
+      }
+    }
 
     const tdAcoes = document.createElement("td");
     const btnVer = document.createElement("button");
     btnVer.textContent = "Ver";
-    btnVer.type = "button";  // evita possíveis problemas com forms
+    btnVer.type = "button";
     btnVer.addEventListener("click", () => abrirDetalhes(index));
     tdAcoes.appendChild(btnVer);
 
